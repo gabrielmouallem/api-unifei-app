@@ -44,6 +44,7 @@ Somente então migrar o banco
 # Comandos Importantes !!
 
     python manage.py runserver        # Rodar o banco localmente
+    
     python manage.py makemigrations   # Rodar SEMPRE que um modelo django for modificado
                                       # Pois ele faz o modelo se transformar no novo modelo no postgres
     
