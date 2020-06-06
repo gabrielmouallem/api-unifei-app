@@ -30,10 +30,27 @@ Obs: dump no Windows
 Somente então migrar o banco
 
     python manage.py migrate
-
+    
 # Criar novo superusuário
     
+    Cada membro da equipe deve criar um superusuário para ter acesso a tudo que o django oferece
     python manage.py createsuperuser
+    
+# Página de Administrador do Django
+
+    http://localhost:8000/admin/
+    Logar com o superusuário
+    
+# Comandos Importantes !!
+
+    python manage.py runserver        # Rodar o banco localmente
+    python manage.py makemigrations   # Rodar SEMPRE que um modelo django for modificado
+                                      # Pois ele faz o modelo se transformar no novo modelo no postgres
+    
+    python manage.py migrate          # Finalmente migra as mudanças pro postgres, o makemigrations cria
+                                      # o que precisa ser mudado, e este comando muda finalmente no postgres
+    
+    **IMPORTANTE**: SEMPRE QUE FOR REALIZADA A MAKEMIGRATIONS COMMITAR AS MUDANÇAS PRO GIT
     
 # Exemplos de Models
     
@@ -78,7 +95,7 @@ Somente então migrar o banco
     class ExemploSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exemplo
-        fields = '__all__']
+        fields = ['__all__']
         
     ____________________________________________________________________________
         
@@ -93,7 +110,7 @@ Somente então migrar o banco
 
 # Exemplos de Views
 
-    Feita sem ajuda do REST Framework para obter resultados especificos no qual
+    SEM O REST FRAMEWORK: Feita sem ajuda do REST Framework para obter resultados especificos no qual
     podemos filtrar algum atributo que não queremos mostrar para o usuário ou algo
     nesse sentido.
     
@@ -113,9 +130,10 @@ Somente então migrar o banco
         
     _____________________________________________________________________________________________________________________
 
-    Feito com a REST Framework ele nos oferece classes que fazem todo o trabalho para a gente
+     COM O REST FRAMEWORK: Feita com o REST Framework ele nos oferece classes que fazem todo o trabalho para a gente
     
     A CreateAPIView por exemplo seu próprio nome ja diz, para criar um novo objeto no banco
+    
     A ListAPIView para listar todos os objetos do banco
     ... e assim por diante (documentação Django Rest)
     
