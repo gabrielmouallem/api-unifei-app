@@ -2,8 +2,9 @@
 MARKER_TYPES = (
     (0, 'Grupo de Estudos'),
     (1, 'Atividades Extras'),
-    (3, 'Eventos'),
-    (2, 'Salas e Locais'),
+    (2, 'Eventos'),
+    (3, 'Salas e Locais'),
+    (4, 'Obras'),
 )
 
 EVENT_TYPES = (
