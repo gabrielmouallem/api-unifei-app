@@ -54,6 +54,7 @@ class LoginView(APIView):
 
 class CreateUserView(APIView):
     permission_classes = ()
+    authentication_classes = ()
 
     def post(self, request):
         body = json.loads(request.body)
