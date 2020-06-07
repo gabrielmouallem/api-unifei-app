@@ -20,5 +20,5 @@ from authentication.views import LoginView, CreateUserView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', LoginView.as_view(), name='auth'),
-    path('auth/create/', CreateUserView.as_view(), name='create-user'),
+    path('auth/register/', CreateUserView.as_view(), name='create-user'),
 ]

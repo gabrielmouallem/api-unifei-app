@@ -13,9 +13,11 @@ from authentication.serializers import UserSerializer
 
 class LoginView(APIView):
     permission_classes = ()
+    authentication_classes = ()
 
     def post(self, request):
         body = json.loads(request.body)
+        print(body)
 
         if not body.get('method'):
             return Response(status=400)
