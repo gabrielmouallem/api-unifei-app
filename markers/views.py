@@ -28,12 +28,74 @@ class ListAllMarkersView(APIView):
             "extra_activity_markers": extra_activity_markers,
         })
 
+
+class ListGenericMarkersView(APIView):
+    permission_classes = ()
+    authentication_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        generic_markers = GenericMarker.objects.all()
+
+        return Response(data={
+            "generic_markers": generic_markers,
+        })
+
+
+class ListEventMarkersView(APIView):
+    permission_classes = ()
+    authentication_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        event_markers = EventMarker.objects.all()
+
+        return Response(data={
+            "event_markers": event_markers,
+        })
+
+
+class ListConstructionMarkersView(APIView):
+    permission_classes = ()
+    authentication_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        construction_markers = ConstructionMarker.objects.all()
+
+        return Response(data={
+            "construction_markers": construction_markers,
+        })
+
+
+class ListStudyGroupMarkersView(APIView):
+    permission_classes = ()
+    authentication_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        study_group_markers = StudyGroupMarker.objects.all()
+
+        return Response(data={
+            "study_group_markers": study_group_markers,
+        })
+
+
+class ListExtraActivityMarkersView(APIView):
+    permission_classes = ()
+    authentication_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        extra_activity_markers = ExtraActivityMarker.objects.all()
+
+        return Response(data={
+            "extra_activity_markers": extra_activity_markers,
+        })
+
+
 class GenericMarkerModelView(CreateAPIView):
     permission_classes = ()
     authentication_classes = (IsAuthenticated, )
 
     serializer_class = GenericMarkerSerializer
     model = GenericMarker
+
 
 class EventMarkerModelView(CreateAPIView):
     permission_classes = ()
@@ -42,6 +104,7 @@ class EventMarkerModelView(CreateAPIView):
     serializer_class = EventMarkerSerializer
     model = EventMarker
 
+
 class ConstructionMarkerModelView(CreateAPIView):
     permission_classes = ()
     authentication_classes = (IsAuthenticated, )
@@ -49,12 +112,14 @@ class ConstructionMarkerModelView(CreateAPIView):
     serializer_class = ConstructionMarkerSerializer
     model = ConstructionMarker
 
+
 class StudyGroupMarkerModelView(CreateAPIView):
     permission_classes = ()
     authentication_classes = (IsAuthenticated, )
 
     serializer_class = StudyGroupMarkerSerializer
     model = StudyGroupMarker
+
 
 class ExtraActivityMarkerModelView(CreateAPIView):
     permission_classes = ()
