@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     # Local Apps
+    'unifei-app',
     'authentication',
+    'markers',
 ]
 
 REST_FRAMEWORK = {
