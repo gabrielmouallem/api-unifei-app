@@ -16,9 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import LoginView, CreateUserView
+from markers.views import GenericMarkerModelView, EventMarkerModelView, ConstructionMarkerModelView, \
+    StudyGroupMarkerModelView, ExtraActivityMarkerModelView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', LoginView.as_view(), name='auth'),
     path('auth/register/', CreateUserView.as_view(), name='create-user'),
+
+    path('GenericMarker/create/', GenericMarkerModelView.as_view(), name='generic-marker-create'),
+    path('EventMarker/create/', EventMarkerModelView.as_view(), name='event-marker-create'),
+    path('ConstructionMarker/create/', ConstructionMarkerModelView.as_view(), name='construction-marker-create'),
+    path('StudyGroupMarker/create/', StudyGroupMarkerModelView.as_view(), name='study-group-marker-create'),
+    path('ExtraActivityMarker/create/', ExtraActivityMarkerModelView.as_view(), name='extra-activity-marker-create'),
 ]

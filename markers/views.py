@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,8 +11,8 @@ from markers.serializers import GenericMarkerSerializer, EventMarkerSerializer, 
 
 
 class ListAllMarkersView(APIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
         generic_markers = GenericMarker.objects.all()
@@ -30,8 +31,8 @@ class ListAllMarkersView(APIView):
 
 
 class ListGenericMarkersView(APIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
         generic_markers = GenericMarker.objects.all()
@@ -42,8 +43,8 @@ class ListGenericMarkersView(APIView):
 
 
 class ListEventMarkersView(APIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
         event_markers = EventMarker.objects.all()
@@ -54,8 +55,8 @@ class ListEventMarkersView(APIView):
 
 
 class ListConstructionMarkersView(APIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
         construction_markers = ConstructionMarker.objects.all()
@@ -66,8 +67,8 @@ class ListConstructionMarkersView(APIView):
 
 
 class ListStudyGroupMarkersView(APIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
         study_group_markers = StudyGroupMarker.objects.all()
@@ -78,8 +79,8 @@ class ListStudyGroupMarkersView(APIView):
 
 
 class ListExtraActivityMarkersView(APIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
         extra_activity_markers = ExtraActivityMarker.objects.all()
@@ -90,40 +91,40 @@ class ListExtraActivityMarkersView(APIView):
 
 
 class GenericMarkerModelView(CreateAPIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     serializer_class = GenericMarkerSerializer
     model = GenericMarker
 
 
 class EventMarkerModelView(CreateAPIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     serializer_class = EventMarkerSerializer
     model = EventMarker
 
 
 class ConstructionMarkerModelView(CreateAPIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     serializer_class = ConstructionMarkerSerializer
     model = ConstructionMarker
 
 
 class StudyGroupMarkerModelView(CreateAPIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     serializer_class = StudyGroupMarkerSerializer
     model = StudyGroupMarker
 
 
 class ExtraActivityMarkerModelView(CreateAPIView):
-    permission_classes = ()
-    authentication_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     serializer_class = ExtraActivityMarkerSerializer
     model = ExtraActivityMarker
