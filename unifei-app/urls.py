@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from authentication.views import LoginView, CreateUserView
 from markers.views import GenericMarkerModelView, EventMarkerModelView, ConstructionMarkerModelView, \
-    StudyGroupMarkerModelView, ExtraActivityMarkerModelView
+    StudyGroupMarkerModelView, ExtraActivityMarkerModelView, ListAllMarkersView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', LoginView.as_view(), name='auth'),
     path('auth/register/', CreateUserView.as_view(), name='create-user'),
 
+    path('markers/', ListAllMarkersView.as_view(), name='markers-list'),
     path('GenericMarker/create/', GenericMarkerModelView.as_view(), name='generic-marker-create'),
     path('EventMarker/create/', EventMarkerModelView.as_view(), name='event-marker-create'),
     path('ConstructionMarker/create/', ConstructionMarkerModelView.as_view(), name='construction-marker-create'),

@@ -1,3 +1,6 @@
+import itertools
+import json
+
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import CreateAPIView
@@ -15,19 +18,20 @@ class ListAllMarkersView(APIView):
     authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
-        generic_markers = GenericMarker.objects.all()
-        event_markers = EventMarker.objects.all()
-        construction_markers = ConstructionMarker.objects.all()
-        study_group_markers = StudyGroupMarker.objects.all()
-        extra_activity_markers = ExtraActivityMarker.objects.all()
+        generic_markers = GenericMarker.objects.all().values()
+        event_markers = EventMarker.objects.all().values()
+        construction_markers = ConstructionMarker.objects.all().values()
+        study_group_markers = StudyGroupMarker.objects.all().values()
+        extra_activity_markers = ExtraActivityMarker.objects.all().values()
 
         return Response(data={
-            "generic_markers": generic_markers,
-            "event_markers": event_markers,
-            "construction_markers": construction_markers,
-            "study_group_markers": study_group_markers,
-            "extra_activity_markers": extra_activity_markers,
-        })
+            "data": list(itertools.chain(
+                generic_markers,
+                event_markers,
+                construction_markers,
+                study_group_markers,
+                extra_activity_markers
+        ))}, status=200)
 
 
 class ListGenericMarkersView(APIView):
