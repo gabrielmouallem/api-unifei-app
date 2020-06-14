@@ -1,9 +1,10 @@
 import itertools
 import json
 
+from django.http import Http404
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,20 +19,74 @@ class ListAllMarkersView(APIView):
     authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
-        generic_markers = GenericMarker.objects.all().values()
-        event_markers = EventMarker.objects.all().values()
-        construction_markers = ConstructionMarker.objects.all().values()
-        study_group_markers = StudyGroupMarker.objects.all().values()
-        extra_activity_markers = ExtraActivityMarker.objects.all().values()
+        extra_activity_markers = ExtraActivityMarker.objects.all().order_by('id').values()
+        study_group_markers = StudyGroupMarker.objects.all().order_by('id').values()
+        event_markers = EventMarker.objects.all().order_by('id').values()
+        construction_markers = ConstructionMarker.objects.all().order_by('id').values()
+        generic_markers = GenericMarker.objects.all().order_by('id').filter(type=3).values()
 
         return Response(data={
             "data": list(itertools.chain(
-                generic_markers,
+                extra_activity_markers,
+                study_group_markers,
                 event_markers,
                 construction_markers,
-                study_group_markers,
-                extra_activity_markers
+                generic_markers,
         ))}, status=200)
+
+
+class SelectedMarkerView(APIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    def get(self, request, *args, **kwargs):
+
+        try:
+            generic_marker = GenericMarker.objects.filter(pk=self.kwargs.get('pk'), type=3).values()
+            if generic_marker.count() == 1:
+                return Response(data={
+                    "data": generic_marker[0],
+                }, status=200)
+        except:
+            pass
+
+        try:
+            study_group_marker = StudyGroupMarker.objects.filter(pk=self.kwargs.get('pk')).values()
+            if study_group_marker.count() == 1:
+                return Response(data={
+                    "data": study_group_marker[0],
+                }, status=200)
+        except:
+            pass
+
+        try:
+            construction_marker = ConstructionMarker.objects.filter(pk=self.kwargs.get('pk')).values()
+            if construction_marker.count() == 1:
+                return Response(data={
+                    "data": construction_marker[0],
+                }, status=200)
+        except:
+            pass
+
+        try:
+            event_marker = EventMarker.objects.filter(pk=self.kwargs.get('pk')).values()
+            if event_marker.count() == 1:
+                return Response(data={
+                    "data": event_marker[0],
+                }, status=200)
+        except:
+            pass
+
+        try:
+            extra_activity_marker = ExtraActivityMarker.objects.filter(pk=self.kwargs.get('pk')).values()
+            if extra_activity_marker.count() == 1:
+                return Response(data={
+                    "data": extra_activity_marker[0],
+                }, status=200)
+        except:
+            pass
+
+        return Response(status=404)
 
 
 class ListGenericMarkersView(APIView):
@@ -94,7 +149,7 @@ class ListExtraActivityMarkersView(APIView):
         })
 
 
-class GenericMarkerModelView(CreateAPIView):
+class GenericMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -102,7 +157,7 @@ class GenericMarkerModelView(CreateAPIView):
     model = GenericMarker
 
 
-class EventMarkerModelView(CreateAPIView):
+class EventMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -110,7 +165,7 @@ class EventMarkerModelView(CreateAPIView):
     model = EventMarker
 
 
-class ConstructionMarkerModelView(CreateAPIView):
+class ConstructionMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -118,7 +173,7 @@ class ConstructionMarkerModelView(CreateAPIView):
     model = ConstructionMarker
 
 
-class StudyGroupMarkerModelView(CreateAPIView):
+class StudyGroupMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -126,9 +181,53 @@ class StudyGroupMarkerModelView(CreateAPIView):
     model = StudyGroupMarker
 
 
-class ExtraActivityMarkerModelView(CreateAPIView):
+class ExtraActivityMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
     serializer_class = ExtraActivityMarkerSerializer
     model = ExtraActivityMarker
+
+
+class GenericMarkerDestroyView(DestroyAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    queryset = GenericMarker.objects.all()
+    serializer_class = GenericMarkerSerializer
+    lookup_field = 'pk'
+
+
+class EventMarkerDestroyView(DestroyAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    queryset = EventMarker.objects.all()
+    serializer_class = EventMarkerSerializer
+    lookup_field = 'pk'
+
+
+class ConstructionMarkerDestroyView(DestroyAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    queryset = ConstructionMarker.objects.all()
+    serializer_class = ConstructionMarkerSerializer
+    lookup_field = 'pk'
+
+class StudyGroupMarkerDestroyView(DestroyAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    queryset = StudyGroupMarker.objects.all()
+    serializer_class = StudyGroupMarkerSerializer
+    lookup_field = 'pk'
+
+
+class ExtraActivityMarkerDestroyView(DestroyAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    queryset = ExtraActivityMarker.objects.all()
+    serializer_class = ExtraActivityMarkerSerializer
+    lookup_field = 'pk'

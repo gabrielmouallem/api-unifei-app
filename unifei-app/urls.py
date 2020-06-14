@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import LoginView, CreateUserView
-from markers.views import GenericMarkerModelView, EventMarkerModelView, ConstructionMarkerModelView, \
-    StudyGroupMarkerModelView, ExtraActivityMarkerModelView, ListAllMarkersView
+from markers.views import ListAllMarkersView, ExtraActivityMarkerCreateView, StudyGroupMarkerCreateView, \
+    ConstructionMarkerCreateView, EventMarkerCreateView, GenericMarkerCreateView, GenericMarkerDestroyView, \
+    EventMarkerDestroyView, ConstructionMarkerDestroyView, StudyGroupMarkerDestroyView, ExtraActivityMarkerDestroyView, \
+    SelectedMarkerView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,9 +27,14 @@ urlpatterns = [
     path('auth/register/', CreateUserView.as_view(), name='create-user'),
 
     path('markers/', ListAllMarkersView.as_view(), name='markers-list'),
-    path('GenericMarker/create/', GenericMarkerModelView.as_view(), name='generic-marker-create'),
-    path('EventMarker/create/', EventMarkerModelView.as_view(), name='event-marker-create'),
-    path('ConstructionMarker/create/', ConstructionMarkerModelView.as_view(), name='construction-marker-create'),
-    path('StudyGroupMarker/create/', StudyGroupMarkerModelView.as_view(), name='study-group-marker-create'),
-    path('ExtraActivityMarker/create/', ExtraActivityMarkerModelView.as_view(), name='extra-activity-marker-create'),
+
+    path('markers/<pk>/', SelectedMarkerView.as_view(), name='selected-marker'),
+
+    path('GenericMarker/create/', GenericMarkerCreateView.as_view(), name='generic-marker-create'),
+    path('EventMarker/create/', EventMarkerCreateView.as_view(), name='event-marker-create'),
+    path('ConstructionMarker/create/', ConstructionMarkerCreateView.as_view(), name='construction-marker-create'),
+    path('StudyGroupMarker/create/', StudyGroupMarkerCreateView.as_view(), name='study-group-marker-create'),
+    path('ExtraActivityMarker/create/', ExtraActivityMarkerCreateView.as_view(), name='extra-activity-marker-create'),
+
+    path('GenericMarker/<pk>/delete/', GenericMarkerDestroyView.as_view(), name='generic-marker-delete'),
 ]
