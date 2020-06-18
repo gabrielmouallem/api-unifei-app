@@ -18,8 +18,9 @@ from django.urls import path
 from authentication.views import LoginView, CreateUserView
 from markers.views import ListAllMarkersView, ExtraActivityMarkerCreateView, StudyGroupMarkerCreateView, \
     ConstructionMarkerCreateView, EventMarkerCreateView, GenericMarkerCreateView, GenericMarkerDestroyView, \
-    EventMarkerDestroyView, ConstructionMarkerDestroyView, StudyGroupMarkerDestroyView, ExtraActivityMarkerDestroyView, \
-    SelectedMarkerView
+ \
+    SelectedMarkerView, GenericMarkerUpdateView, EventMarkerUpdateView, ConstructionMarkerUpdateView, \
+    StudyGroupMarkerUpdateView, ExtraActivityMarkerUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +36,12 @@ urlpatterns = [
     path('ConstructionMarker/create/', ConstructionMarkerCreateView.as_view(), name='construction-marker-create'),
     path('StudyGroupMarker/create/', StudyGroupMarkerCreateView.as_view(), name='study-group-marker-create'),
     path('ExtraActivityMarker/create/', ExtraActivityMarkerCreateView.as_view(), name='extra-activity-marker-create'),
+
+    path('GenericMarker/<pk>/update/', GenericMarkerUpdateView.as_view(), name='generic-marker-update'),
+    path('EventMarker/<pk>/update/', EventMarkerUpdateView.as_view(), name='event-marker-update'),
+    path('ConstructionMarker/<pk>/update/', ConstructionMarkerUpdateView.as_view(), name='construction-marker-update'),
+    path('StudyGroupMarker/<pk>/update/', StudyGroupMarkerUpdateView.as_view(), name='study-group-marker-update'),
+    path('ExtraActivityMarker/<pk>/update/', ExtraActivityMarkerUpdateView.as_view(), name='extra-activity-marker-update'),
 
     path('GenericMarker/<pk>/delete/', GenericMarkerDestroyView.as_view(), name='generic-marker-delete'),
 ]

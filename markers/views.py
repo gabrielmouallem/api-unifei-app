@@ -4,7 +4,7 @@ import json
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import CreateAPIView, DestroyAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -198,7 +198,16 @@ class GenericMarkerDestroyView(DestroyAPIView):
     lookup_field = 'pk'
 
 
-class EventMarkerDestroyView(DestroyAPIView):
+class GenericMarkerUpdateView(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    print("teste")
+    queryset = GenericMarker.objects.all()
+    serializer_class = GenericMarkerSerializer
+    lookup_field = 'pk'
+
+
+class EventMarkerUpdateView(UpdateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -207,7 +216,7 @@ class EventMarkerDestroyView(DestroyAPIView):
     lookup_field = 'pk'
 
 
-class ConstructionMarkerDestroyView(DestroyAPIView):
+class ConstructionMarkerUpdateView(UpdateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -215,7 +224,7 @@ class ConstructionMarkerDestroyView(DestroyAPIView):
     serializer_class = ConstructionMarkerSerializer
     lookup_field = 'pk'
 
-class StudyGroupMarkerDestroyView(DestroyAPIView):
+class StudyGroupMarkerUpdateView(UpdateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -224,7 +233,7 @@ class StudyGroupMarkerDestroyView(DestroyAPIView):
     lookup_field = 'pk'
 
 
-class ExtraActivityMarkerDestroyView(DestroyAPIView):
+class ExtraActivityMarkerUpdateView(UpdateAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
