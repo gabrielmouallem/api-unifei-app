@@ -5,7 +5,8 @@ from django.contrib.auth.models import User, UserManager
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from rest_framework import status
-from rest_framework.generics import CreateAPIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,7 +14,9 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
-from authentication.serializers import UserSerializer
+from authentication.models import Profile
+from authentication.serializers import UserSerializer, ProfileSerializer
+from django.forms.models import model_to_dict
 
 
 class LoginView(APIView):
@@ -105,3 +108,64 @@ class CreateUserView(APIView):
             return Response(data={"User created."}, status=200)
         else:
             return Response(data={"Invalid user or already created."}, status=400)
+
+
+class UpdateProfileView(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    lookup_field = 'pk'
+
+class CreateProfileView(CreateAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    def post(self, request, *args, **kwargs):
+
+        try:
+            profile_serializer = ProfileSerializer(data={
+                "user": self.request.user.pk,
+                "name": request.data['name'],
+                "email": request.data['email'],
+                "course": request.data['course'],
+                "user_permissions": request.data['user_permissions'],
+                "code": request.data['code']
+            })
+            if profile_serializer.is_valid():
+                profile_serializer.save()
+                return Response(profile_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response(data={"Error creating profile.", str(e)}, status=400)
+
+
+class SelectedProfileView(APIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
+    def get(self, request):
+
+        try:
+            selected_profile = Profile.objects.get(user=self.request.user.pk)
+            dict_selected_profile = model_to_dict(selected_profile)
+            print(dict_selected_profile)
+            return Response(data={
+                "created": True,
+                "data": dict_selected_profile
+            }, status=200)
+
+        except Exception as ex:
+            return Response(data={
+                "created": False,
+                "data": {
+                    "name": None,
+                    "email": self.request.user.email,
+                    "course": None,
+                    "user_permissions": None,
+                    "code": None
+                }
+            }, status=200)

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from authentication.views import LoginView, CreateUserView
+from authentication.views import LoginView, CreateUserView, CreateProfileView, SelectedProfileView, UpdateProfileView
 from markers.views import ListAllMarkersView, ExtraActivityMarkerCreateView, StudyGroupMarkerCreateView, \
     ConstructionMarkerCreateView, EventMarkerCreateView, GenericMarkerCreateView, GenericMarkerDestroyView, \
  \
@@ -26,6 +26,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', LoginView.as_view(), name='auth'),
     path('auth/register/', CreateUserView.as_view(), name='create-user'),
+
+    path('profile/', SelectedProfileView.as_view(), name='profile'),
+    path('profile/create/', CreateProfileView.as_view(), name='create-profile'),
+    path('profile/<pk>/edit/', UpdateProfileView.as_view(), name='edit-profile'),
 
     path('markers/', ListAllMarkersView.as_view(), name='markers-list'),
 
