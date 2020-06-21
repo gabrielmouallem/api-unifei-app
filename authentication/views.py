@@ -22,7 +22,6 @@ class LoginView(APIView):
 
     def post(self, request):
         body = json.loads(request.body)
-        print(body)
 
         if not body.get('method'):
             return Response(status=400)
@@ -48,11 +47,13 @@ class LoginView(APIView):
                     user = User.objects.create_user(username, username)
                     user.set_password(password)
                     token, _ = Token.objects.get_or_create(user=user)
+                    print("google - created account for ", username)
                     return Response({'token': token.key}, status=200)
 
                 else:
                     return Response(data={"Error creating google account."}, status=400)
 
+            print("google - logged on ", body['email'])
             token, _ = Token.objects.get_or_create(user=user)
             return Response({'token': token.key}, status=200)
 
