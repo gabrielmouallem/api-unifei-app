@@ -201,7 +201,7 @@ class GenericMarkerDestroyView(DestroyAPIView):
 class GenericMarkerUpdateView(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    print("teste")
+
     queryset = GenericMarker.objects.all()
     serializer_class = GenericMarkerSerializer
     lookup_field = 'pk'

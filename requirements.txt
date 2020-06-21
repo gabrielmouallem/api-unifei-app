@@ -1,5 +1,5 @@
 appdirs==1.4.4
-asgiref==3.2.7
+asgiref==3.2.10
 distlib==0.3.0
 Django==3.0.6
 djangorestframework==3.11.0
@@ -10,4 +10,5 @@ sqlparse==0.3.1
 virtualenv==20.0.20
 virtualenvwrapper-win==1.2.6
 psycopg2-binary==2.8.5
-django-cors-headers==3.3.0
+django-cors-headers==3.4.0
+google-auth==1.18.0

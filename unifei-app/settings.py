@@ -70,6 +70,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'unifei-app.urls'
 
+GOOGLE_CLIENT_ID = '410043933012-2op2u0o4hda7eaouh46ho2fvujtt3ee8.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = 'vyjvtdkp8fSPl_wXBSZeTjoh'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
