@@ -12,3 +12,4 @@ virtualenvwrapper-win==1.2.6
 psycopg2-binary==2.8.5
 django-cors-headers==3.4.0
 google-auth==1.18.0
+pdfplumber==0.5.21

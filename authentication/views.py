@@ -17,7 +17,55 @@ from django.contrib.auth import authenticate
 from authentication.models import Profile
 from authentication.serializers import UserSerializer, ProfileSerializer
 from django.forms.models import model_to_dict
+import base64, os
+import pdfplumber as pdf
 
+def extract_data(table):
+    json = []
+    flag = True
+    for row in table:
+        data = {}
+        if flag == True:
+            flag = False
+            continue
+        if ('SUPERV' in row[0]) or ('FINAL' in row[0]):
+            continue
+        if 'ORIENTADOR' in row[1]:
+            print('b')
+            continue
+        if not row[4]:
+            continue
+        data['Horário'] = row[4]
+        data['Local'] = row[1].split()[-1]
+        data['Código'] = row[0]
+        if data:
+            json.append(data)
+
+    return json
+
+
+class SendPdfView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    def post (self, request):
+        try:
+
+            data = request.data['data']
+            with open(os.path.expanduser('./schedule.pdf'), 'wb') as fout:
+                fout.write(base64.b64decode(data))
+
+            # Caminho do arquivo
+            path = './schedule.pdf'
+            reader = pdf.open(path)
+            page = reader.pages[0]
+            table_data = page.extract_tables()[0]
+
+            data = extract_data(table_data)
+
+            return Response(data={"data": data})
+
+        except Exception as ex:
+            return Response(data={"data": None, "error": str(ex)})
 
 class LoginView(APIView):
     permission_classes = ()
