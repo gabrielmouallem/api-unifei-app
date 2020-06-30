@@ -20,28 +20,80 @@ from django.forms.models import model_to_dict
 import base64, os
 import pdfplumber as pdf
 
-def extract_data(table):
-    json = []
-    flag = True
-    for row in table:
-        data = {}
-        if flag == True:
-            flag = False
-            continue
-        if ('SUPERV' in row[0]) or ('FINAL' in row[0]):
-            continue
-        if 'ORIENTADOR' in row[1]:
-            print('b')
-            continue
-        if not row[4]:
-            continue
-        data['Horário'] = row[4]
-        data['Local'] = row[1].split()[-1]
-        data['Código'] = row[0]
-        if data:
-            json.append(data)
+def return_weekday(index):
+    if index == 1:
+        return "Domingo"
+    if index == 2:
+        return "Segunda"
+    if index == 3:
+        return "Terça"
+    if index == 4:
+        return "Quarta"
+    if index == 5:
+        return "Quinta"
+    if index == 6:
+        return "Sexta"
+    if index == 7:
+        return "Sábado"
 
-    return json
+def unique_list(l):
+    ulist = []
+    [ulist.append(x) for x in l if x not in ulist]
+    return ulist
+
+def extract_data(first_table, second_table):
+    table = []
+    first_table_result = []
+    flag = True
+    for row_index, row in enumerate(first_table):
+        if "" in row:
+            for column_index, column in enumerate(row):
+                if column != "":
+                    place_to_append = table[row_index - 1][column_index]
+                    table[row_index - 1][column_index] = place_to_append + column
+                    # Deletar a row_index
+        else:
+            table.append(row)
+    # print(table)
+    for row in table:
+        if "" in row:
+            print("jumped row.")
+        else:
+            data = {}
+            if flag == True:
+                flag = False
+                continue
+            if ('SUPERV' in row[0]) or ('FINAL' in row[0]):
+                continue
+            if 'ORIENTADOR' in row[1]:
+                # print('b')
+                continue
+            if not row[4]:
+                continue
+            data['codigo_horario'] = row[4]
+            data['local'] = row[1].split()[-1]
+            data['codigo'] = row[0]
+            if data:
+                first_table_result.append(data)
+
+    for row_index, row in enumerate(second_table):
+        if row_index > 0:
+            for column_index, column in enumerate(row):
+                time = row[0]
+                for index, table in enumerate(first_table_result):
+                    if table['codigo'] == column:
+                        if not "horario" in first_table_result[index]:
+                            first_table_result[index]['horario'] = str(column_index) +"# " + time
+                        else:
+                            first_table_result[index]['horario'] = first_table_result[index]['horario'] + " $ " + str(column_index) +"# " + time
+                        if not "dia_da_semana" in first_table_result[index]:
+                            first_table_result[index]['dia_da_semana'] = return_weekday(column_index)
+                        else:
+                            if str(first_table_result[index]['dia_da_semana']).find(return_weekday(column_index)):
+                                first_table_result[index]['dia_da_semana'] = first_table_result[index]['dia_da_semana'] + " $ " + return_weekday(column_index)
+                                first_table_result[index]['dia_da_semana'] = ' '.join(unique_list(first_table_result[index]['dia_da_semana'].split()))
+
+    return (first_table_result)
 
 
 class SendPdfView(APIView):
@@ -50,18 +102,19 @@ class SendPdfView(APIView):
     def post (self, request):
         try:
 
-            data = request.data['data']
-            with open(os.path.expanduser('./schedule.pdf'), 'wb') as fout:
-                fout.write(base64.b64decode(data))
+            # data = request.data['data']
+            # with open(os.path.expanduser('./schedule.pdf'), 'wb') as fout:
+            #     fout.write(base64.b64decode(data))
 
             # Caminho do arquivo
             path = './schedule.pdf'
             reader = pdf.open(path)
             page = reader.pages[0]
-            table_data = page.extract_tables()[0]
+            first_table_data = page.extract_tables()[0]
+            second_table_data = page.extract_tables()[1]
 
-            data = extract_data(table_data)
-
+            data = extract_data(first_table_data, second_table_data)
+            # print(data)
             return Response(data={"data": data})
 
         except Exception as ex:
