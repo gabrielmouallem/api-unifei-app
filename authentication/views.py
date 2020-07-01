@@ -22,19 +22,19 @@ import pdfplumber as pdf
 
 def return_weekday(index):
     if index == 1:
-        return "Domingo"
+        return "1#Domingo"
     if index == 2:
-        return "Segunda"
+        return "2#Segunda"
     if index == 3:
-        return "Terça"
+        return "3#Terça"
     if index == 4:
-        return "Quarta"
+        return "4#Quarta"
     if index == 5:
-        return "Quinta"
+        return "5#Quinta"
     if index == 6:
-        return "Sexta"
+        return "6#Sexta"
     if index == 7:
-        return "Sábado"
+        return "7#Sábado"
 
 def unique_list(l):
     ulist = []
@@ -83,14 +83,14 @@ def extract_data(first_table, second_table):
                 for index, table in enumerate(first_table_result):
                     if table['codigo'] == column:
                         if not "horario" in first_table_result[index]:
-                            first_table_result[index]['horario'] = str(column_index) +"# " + time
+                            first_table_result[index]['horario'] = str(column_index) +"#" + time
                         else:
-                            first_table_result[index]['horario'] = first_table_result[index]['horario'] + " $ " + str(column_index) +"# " + time
+                            first_table_result[index]['horario'] = first_table_result[index]['horario'] + " $" + str(column_index) +"#" + time
                         if not "dia_da_semana" in first_table_result[index]:
                             first_table_result[index]['dia_da_semana'] = return_weekday(column_index)
                         else:
                             if str(first_table_result[index]['dia_da_semana']).find(return_weekday(column_index)):
-                                first_table_result[index]['dia_da_semana'] = first_table_result[index]['dia_da_semana'] + " $ " + return_weekday(column_index)
+                                first_table_result[index]['dia_da_semana'] = first_table_result[index]['dia_da_semana'] + " $" + return_weekday(column_index)
                                 first_table_result[index]['dia_da_semana'] = ' '.join(unique_list(first_table_result[index]['dia_da_semana'].split()))
 
     return (first_table_result)
