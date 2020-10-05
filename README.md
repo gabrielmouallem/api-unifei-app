@@ -4,14 +4,14 @@ Your app should now be running on [localhost:8000](http://localhost:8000/).
 
     linux: sudo -u postgres psql
     windows: .\psql.exe -U postgres
-    drop database unifei-app;
-    CREATE DATABASE unifei-app;
-    CREATE USER postgres WITH PASSWORD 'gabriel123';
-    ALTER ROLE postgres SET client_encoding TO 'utf8';
-    ALTER ROLE postgres SET default_transaction_isolation TO 'read committed';
-    ALTER ROLE postgres SET timezone TO 'UTC';
-    GRANT ALL PRIVILEGES ON DATABASE unifei-app TO postgres;
-    ALTER USER postgres CREATEDB;
+    drop database unifeiapp;
+    CREATE DATABASE unifeiapp;
+    CREATE USER unifeiapp WITH PASSWORD 'unifeiapp123';
+    ALTER ROLE unifeiapp SET client_encoding TO 'utf8';
+    ALTER ROLE unifeiapp SET default_transaction_isolation TO 'read committed';
+    ALTER ROLE unifeiapp SET timezone TO 'UTC';
+    GRANT ALL PRIVILEGES ON DATABASE unifei-app TO unifeiapp;
+    ALTER USER unifeiapp CREATEDB;
 
     *Esses comandos podem ser feitos através do PgMyAdmin ao invés da linha de comando acima*
     

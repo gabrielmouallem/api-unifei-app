@@ -98,9 +98,9 @@ WSGI_APPLICATION = 'unifei-app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'unifei-app',
-        'USER': 'postgres',
-        'PASSWORD': 'gabriel123',
+        'NAME': 'unifeiapp',
+        'USER': 'unifeiapp',
+        'PASSWORD': 'unifeiapp123',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
