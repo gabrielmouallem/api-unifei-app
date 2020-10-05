@@ -2,7 +2,8 @@ Your app should now be running on [localhost:8000](http://localhost:8000/).
 
 # Criar Banco de Dados
 
-    sudo -u postgres psql
+    linux: sudo -u postgres psql
+    windows: .\psql.exe -U postgres
     drop database unifei-app;
     CREATE DATABASE unifei-app;
     CREATE USER postgres WITH PASSWORD 'gabriel123';
