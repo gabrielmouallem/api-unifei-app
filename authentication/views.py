@@ -102,12 +102,12 @@ class SendPdfView(APIView):
     def post (self, request):
         try:
 
-            data = request.data['data']
-            with open(os.path.expanduser('./schedule.pdf'), 'wb') as fout:
-                fout.write(base64.b64decode(data))
+            # data = request.data['data']
+            # with open(os.path.expanduser('./myschedule.pdf'), 'wb') as fout:
+            #     fout.write(base64.b64decode(data))
 
             # Caminho do arquivo
-            path = './schedule.pdf'
+            path = './myschedule.pdf'
             reader = pdf.open(path)
             page = reader.pages[0]
             first_table_data = page.extract_tables()[0]
