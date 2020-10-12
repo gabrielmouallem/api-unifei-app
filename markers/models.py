@@ -1,4 +1,6 @@
+import requests
 from django.db import models
+from django.db.models.signals import post_save
 
 from markers.constants import MARKER_TYPES, EVENT_TYPES, CONSTRUCTION_TYPES
 
@@ -50,3 +52,75 @@ class ExtraActivityMarker(GenericMarker):
 
     class Meta:
         ordering = ('activity_type',)
+
+def on_generic_marker_post_save(sender, instance: GenericMarker, **kwargs):
+    try:
+        body = {
+            'id': instance.id,
+            'name': instance.name,
+            'latitude': instance.latitude,
+            'longitude': instance.longitude,
+            'type': instance.type
+        }
+        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+    except Exception as ex:
+        print(str(ex))
+
+def on_event_marker_post_save(sender, instance: EventMarker, **kwargs):
+    try:
+        body = {
+            'id': instance.id,
+            'name': instance.name,
+            'latitude': instance.latitude,
+            'longitude': instance.longitude,
+            'type': instance.type
+        }
+        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+    except Exception as ex:
+        print(str(ex))
+
+def on_construction_marker_post_save(sender, instance: ConstructionMarker, **kwargs):
+    try:
+        body = {
+            'id': instance.id,
+            'name': instance.name,
+            'latitude': instance.latitude,
+            'longitude': instance.longitude,
+            'type': instance.type
+        }
+        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+    except Exception as ex:
+        print(str(ex))
+
+def on_study_group_marker_post_save(sender, instance: StudyGroupMarker, **kwargs):
+    try:
+        body = {
+            'id': instance.id,
+            'name': instance.name,
+            'latitude': instance.latitude,
+            'longitude': instance.longitude,
+            'type': instance.type
+        }
+        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+    except Exception as ex:
+        print(str(ex))
+
+def on_extra_activity_marker_post_save(sender, instance: ExtraActivityMarker, **kwargs):
+    try:
+        body = {
+            'id': instance.id,
+            'name': instance.name,
+            'latitude': instance.latitude,
+            'longitude': instance.longitude,
+            'type': instance.type
+        }
+        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+    except Exception as ex:
+        print(str(ex))
+
+
+post_save.connect(on_generic_marker_post_save, sender=GenericMarker)
+post_save.connect(on_construction_marker_post_save, sender=ConstructionMarker)
+post_save.connect(on_event_marker_post_save, sender=EventMarker)
+post_save.connect(on_extra_activity_marker_post_save, sender=ExtraActivityMarker)
+post_save.connect(on_study_group_marker_post_save, sender=StudyGroupMarker)
