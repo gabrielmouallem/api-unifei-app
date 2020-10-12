@@ -27,11 +27,11 @@ class ListAllMarkersView(APIView):
 
         return Response(data={
             "data": list(itertools.chain(
-                extra_activity_markers,
                 study_group_markers,
+                extra_activity_markers,
                 event_markers,
-                construction_markers,
                 generic_markers,
+                construction_markers,
         ))}, status=200)
 
 
