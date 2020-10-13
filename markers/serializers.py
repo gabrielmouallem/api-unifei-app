@@ -30,6 +30,17 @@ class GenericMarkerSerializer(serializers.ModelSerializer):
 
 
 class EventMarkerSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, obj):
+        if obj.profile is not None:
+            return {
+                'id': Profile.objects.get(id=obj.profile.id).id,
+                'name': Profile.objects.get(id=obj.profile.id).name,
+            }
+        else:
+            return None
+
     class Meta:
         model = EventMarker
         fields = '__all__'
@@ -37,6 +48,17 @@ class EventMarkerSerializer(serializers.ModelSerializer):
 
 
 class ConstructionMarkerSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, obj):
+        if obj.profile is not None:
+            return {
+                'id': Profile.objects.get(id=obj.profile.id).id,
+                'name': Profile.objects.get(id=obj.profile.id).name,
+            }
+        else:
+            return None
+
     class Meta:
         model = ConstructionMarker
         fields = '__all__'
@@ -44,6 +66,17 @@ class ConstructionMarkerSerializer(serializers.ModelSerializer):
 
 
 class StudyGroupMarkerSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, obj):
+        if obj.profile is not None:
+            return {
+                'id': Profile.objects.get(id=obj.profile.id).id,
+                'name': Profile.objects.get(id=obj.profile.id).name,
+            }
+        else:
+            return None
+
     class Meta:
         model = StudyGroupMarker
         fields = '__all__'
@@ -51,6 +84,17 @@ class StudyGroupMarkerSerializer(serializers.ModelSerializer):
 
 
 class ExtraActivityMarkerSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, obj):
+        if obj.profile is not None:
+            return {
+                'id': Profile.objects.get(id=obj.profile.id).id,
+                'name': Profile.objects.get(id=obj.profile.id).name,
+            }
+        else:
+            return None
+
     class Meta:
         model = ExtraActivityMarker
         fields = '__all__'
