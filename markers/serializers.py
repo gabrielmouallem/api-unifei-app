@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from authentication.models import Profile
 from markers.models import GenericMarker, ExtraActivityMarker, StudyGroupMarker, ConstructionMarker, EventMarker, Marker
 
 
@@ -11,9 +12,20 @@ class MarkerSerializer(serializers.ModelSerializer):
 
 
 class GenericMarkerSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, obj):
+        if obj.profile is not None:
+            return {
+                'id': Profile.objects.get(id=obj.profile.id).id,
+                'name': Profile.objects.get(id=obj.profile.id).name,
+            }
+        else:
+            return None
+
     class Meta:
         model = GenericMarker
-        fields = '__all__'
+        fields = "__all__"
         read_only_fields = ['id']
 
 

@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from authentication.models import Profile
 from markers.models import GenericMarker, EventMarker, ConstructionMarker, StudyGroupMarker, ExtraActivityMarker, Marker
 from markers.serializers import GenericMarkerSerializer, EventMarkerSerializer, ConstructionMarkerSerializer, \
     StudyGroupMarkerSerializer, ExtraActivityMarkerSerializer, MarkerSerializer
@@ -141,6 +142,12 @@ class GenericMarkerCreateView(CreateAPIView):
     serializer_class = GenericMarkerSerializer
     model = GenericMarker
 
+    def post(self, request, *args, **kwargs):
+        temp_request = request
+        temp_request.data['profile'] = Profile.objects.filter(user_id=self.request.user.id).first().id
+        return self.create(temp_request, *args, **kwargs)
+
+
 
 class EventMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
@@ -149,6 +156,10 @@ class EventMarkerCreateView(CreateAPIView):
     serializer_class = EventMarkerSerializer
     model = EventMarker
 
+    def post(self, request, *args, **kwargs):
+        temp_request = request
+        temp_request.data['profile'] = Profile.objects.filter(user_id=self.request.user.id).first().id
+        return self.create(temp_request, *args, **kwargs)
 
 class ConstructionMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
@@ -157,6 +168,10 @@ class ConstructionMarkerCreateView(CreateAPIView):
     serializer_class = ConstructionMarkerSerializer
     model = ConstructionMarker
 
+    def post(self, request, *args, **kwargs):
+        temp_request = request
+        temp_request.data['profile'] = Profile.objects.filter(user_id=self.request.user.id).first().id
+        return self.create(temp_request, *args, **kwargs)
 
 class StudyGroupMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
@@ -165,6 +180,10 @@ class StudyGroupMarkerCreateView(CreateAPIView):
     serializer_class = StudyGroupMarkerSerializer
     model = StudyGroupMarker
 
+    def post(self, request, *args, **kwargs):
+        temp_request = request
+        temp_request.data['profile'] = Profile.objects.filter(user_id=self.request.user.id).first().id
+        return self.create(temp_request, *args, **kwargs)
 
 class ExtraActivityMarkerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
@@ -173,6 +192,10 @@ class ExtraActivityMarkerCreateView(CreateAPIView):
     serializer_class = ExtraActivityMarkerSerializer
     model = ExtraActivityMarker
 
+    def post(self, request, *args, **kwargs):
+        temp_request = request
+        temp_request.data['profile'] = Profile.objects.filter(user_id=self.request.user.id).first().id
+        return self.create(temp_request, *args, **kwargs)
 
 class MarkerDestroyView(DestroyAPIView):
     permission_classes = (IsAuthenticated, )
