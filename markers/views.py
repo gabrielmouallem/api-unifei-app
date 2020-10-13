@@ -41,50 +41,35 @@ class SelectedMarkerView(APIView):
 
     def get(self, request, *args, **kwargs):
 
-        try:
-            generic_marker = GenericMarker.objects.filter(pk=self.kwargs.get('pk'), type=3).values()
-            if generic_marker.count() == 1:
-                return Response(data={
-                    "data": generic_marker[0],
-                }, status=200)
-        except:
-            pass
+        generic_marker = GenericMarker.objects.filter(pk=self.kwargs.get('pk'), type=3).first()
+        if generic_marker is not None:
+            return Response(data={
+                "data": GenericMarkerSerializer(instance=generic_marker).data,
+            }, status=200)
 
-        try:
-            study_group_marker = StudyGroupMarker.objects.filter(pk=self.kwargs.get('pk')).values()
-            if study_group_marker.count() == 1:
-                return Response(data={
-                    "data": study_group_marker[0],
-                }, status=200)
-        except:
-            pass
+        study_group_marker = StudyGroupMarker.objects.filter(pk=self.kwargs.get('pk')).first()
+        if study_group_marker is not None:
+            return Response(data={
+                "data": StudyGroupMarkerSerializer(instance=study_group_marker).data,
+            }, status=200)
 
-        try:
-            construction_marker = ConstructionMarker.objects.filter(pk=self.kwargs.get('pk')).values()
-            if construction_marker.count() == 1:
-                return Response(data={
-                    "data": construction_marker[0],
-                }, status=200)
-        except:
-            pass
+        construction_marker = ConstructionMarker.objects.filter(pk=self.kwargs.get('pk')).first()
+        if construction_marker is not None:
+            return Response(data={
+                "data": ConstructionMarkerSerializer(instance=construction_marker),
+            }, status=200)
 
-        try:
-            event_marker = EventMarker.objects.filter(pk=self.kwargs.get('pk')).values()
-            if event_marker.count() == 1:
-                return Response(data={
-                    "data": event_marker[0],
-                }, status=200)
-        except:
-            pass
+        event_marker = EventMarker.objects.filter(pk=self.kwargs.get('pk')).first()
+        if event_marker is not None:
+            return Response(data={
+                "data": EventMarkerSerializer(instance=event_marker),
+            }, status=200)
 
-        try:
-            extra_activity_marker = ExtraActivityMarker.objects.filter(pk=self.kwargs.get('pk')).values()
-            if extra_activity_marker.count() == 1:
-                return Response(data={
-                    "data": extra_activity_marker[0],
-                }, status=200)
-        except:
-            pass
+        extra_activity_marker = ExtraActivityMarker.objects.filter(pk=self.kwargs.get('pk')).first()
+        if extra_activity_marker is not None:
+            return Response(data={
+                "data": ExtraActivityMarkerSerializer(instance=extra_activity_marker),
+            }, status=200)
 
         return Response(status=404)
 
