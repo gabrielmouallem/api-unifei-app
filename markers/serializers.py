@@ -1,7 +1,13 @@
 from rest_framework import serializers
 
-from markers.models import GenericMarker, ExtraActivityMarker, StudyGroupMarker, ConstructionMarker, EventMarker
+from markers.models import GenericMarker, ExtraActivityMarker, StudyGroupMarker, ConstructionMarker, EventMarker, Marker
 
+
+class MarkerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Marker
+        fields = '__all__'
+        read_only_fields = ['id']
 
 class GenericMarkerSerializer(serializers.ModelSerializer):
     class Meta:

@@ -9,9 +9,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from markers.models import GenericMarker, EventMarker, ConstructionMarker, StudyGroupMarker, ExtraActivityMarker
+from markers.models import GenericMarker, EventMarker, ConstructionMarker, StudyGroupMarker, ExtraActivityMarker, Marker
 from markers.serializers import GenericMarkerSerializer, EventMarkerSerializer, ConstructionMarkerSerializer, \
-    StudyGroupMarkerSerializer, ExtraActivityMarkerSerializer
+    StudyGroupMarkerSerializer, ExtraActivityMarkerSerializer, MarkerSerializer
 
 
 class ListAllMarkersView(APIView):
@@ -189,12 +189,12 @@ class ExtraActivityMarkerCreateView(CreateAPIView):
     model = ExtraActivityMarker
 
 
-class GenericMarkerDestroyView(DestroyAPIView):
+class MarkerDestroyView(DestroyAPIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
-    queryset = GenericMarker.objects.all()
-    serializer_class = GenericMarkerSerializer
+    queryset = Marker.objects.all()
+    serializer_class = MarkerSerializer
     lookup_field = 'pk'
 
 

@@ -2,11 +2,11 @@ import requests
 from django.db import models
 from django.db.models.signals import post_save
 
+from authentication.models import Profile
 from markers.constants import MARKER_TYPES, EVENT_TYPES, CONSTRUCTION_TYPES
 
 
-class GenericMarker(models.Model):
-
+class Marker(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     type = models.IntegerField(choices=MARKER_TYPES, default=0)
 
@@ -19,7 +19,17 @@ class GenericMarker(models.Model):
         ordering = ('type',)
 
 
-class EventMarker(GenericMarker):
+class GenericMarker(Marker):
+
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ('type',)
+
+
+class EventMarker(Marker):
+
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
 
     event_type = models.IntegerField(choices=EVENT_TYPES, null=False, blank=False)
     event_date = models.DateTimeField()
@@ -28,7 +38,9 @@ class EventMarker(GenericMarker):
         ordering = ('event_type',)
 
 
-class ConstructionMarker(GenericMarker):
+class ConstructionMarker(Marker):
+
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
 
     construction_type = models.IntegerField(choices=CONSTRUCTION_TYPES, null=False, blank=False)
 
@@ -36,7 +48,9 @@ class ConstructionMarker(GenericMarker):
         ordering = ('construction_type',)
 
 
-class StudyGroupMarker(GenericMarker):
+class StudyGroupMarker(Marker):
+
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
 
     group_size = models.PositiveIntegerField(null=False, blank=False)
     discipline = models.CharField(max_length=300, default='')
@@ -46,7 +60,9 @@ class StudyGroupMarker(GenericMarker):
         ordering = ('group_size',)
 
 
-class ExtraActivityMarker(GenericMarker):
+class ExtraActivityMarker(Marker):
+
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
 
     activity_type = models.CharField(max_length=300, default='')
 

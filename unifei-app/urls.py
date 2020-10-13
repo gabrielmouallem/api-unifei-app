@@ -18,7 +18,7 @@ from django.urls import path
 from authentication.views import LoginView, CreateUserView, CreateProfileView, SelectedProfileView, UpdateProfileView, \
     SendPdfView
 from markers.views import ListAllMarkersView, ExtraActivityMarkerCreateView, StudyGroupMarkerCreateView, \
-    ConstructionMarkerCreateView, EventMarkerCreateView, GenericMarkerCreateView, GenericMarkerDestroyView, \
+    ConstructionMarkerCreateView, EventMarkerCreateView, GenericMarkerCreateView, MarkerDestroyView, \
  \
     SelectedMarkerView, GenericMarkerUpdateView, EventMarkerUpdateView, ConstructionMarkerUpdateView, \
     StudyGroupMarkerUpdateView, ExtraActivityMarkerUpdateView
@@ -50,5 +50,5 @@ urlpatterns = [
     path('StudyGroupMarker/<pk>/update/', StudyGroupMarkerUpdateView.as_view(), name='study-group-marker-update'),
     path('ExtraActivityMarker/<pk>/update/', ExtraActivityMarkerUpdateView.as_view(), name='extra-activity-marker-update'),
 
-    path('GenericMarker/<pk>/delete/', GenericMarkerDestroyView.as_view(), name='generic-marker-delete'),
+    path('GenericMarker/<pk>/delete/', MarkerDestroyView.as_view(), name='generic-marker-delete'),
 ]
