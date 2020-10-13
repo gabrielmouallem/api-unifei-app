@@ -9,11 +9,13 @@ class MarkerSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
+
 class GenericMarkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = GenericMarker
         fields = '__all__'
         read_only_fields = ['id']
+
 
 class EventMarkerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,17 +23,20 @@ class EventMarkerSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
+
 class ConstructionMarkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConstructionMarker
         fields = '__all__'
         read_only_fields = ['id']
 
+
 class StudyGroupMarkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudyGroupMarker
         fields = '__all__'
         read_only_fields = ['id']
+
 
 class ExtraActivityMarkerSerializer(serializers.ModelSerializer):
     class Meta:
