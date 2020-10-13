@@ -10,7 +10,7 @@ Your app should now be running on [localhost:8000](http://localhost:8000/).
     ALTER ROLE unifeiapp SET client_encoding TO 'utf8';
     ALTER ROLE unifeiapp SET default_transaction_isolation TO 'read committed';
     ALTER ROLE unifeiapp SET timezone TO 'UTC';
-    GRANT ALL PRIVILEGES ON DATABASE unifei-app TO unifeiapp;
+    GRANT ALL PRIVILEGES ON DATABASE unifeiapp TO unifeiapp;
     ALTER USER unifeiapp CREATEDB;
 
     *Esses comandos podem ser feitos através do PgMyAdmin ao invés da linha de comando acima*
