@@ -78,7 +78,7 @@ def on_generic_marker_post_save(sender, instance: GenericMarker, **kwargs):
             'longitude': instance.longitude,
             'type': instance.type
         }
-        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+        requests.post("http://localhost:8001/new-marker", data=body, timeout=5)
     except Exception as ex:
         print(str(ex))
 
@@ -91,7 +91,7 @@ def on_event_marker_post_save(sender, instance: EventMarker, **kwargs):
             'longitude': instance.longitude,
             'type': instance.type
         }
-        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+        requests.post("http://localhost:8001/new-marker", data=body, timeout=5)
     except Exception as ex:
         print(str(ex))
 
@@ -104,7 +104,7 @@ def on_construction_marker_post_save(sender, instance: ConstructionMarker, **kwa
             'longitude': instance.longitude,
             'type': instance.type
         }
-        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+        requests.post("http://localhost:8001/new-marker", data=body, timeout=5)
     except Exception as ex:
         print(str(ex))
 
@@ -117,7 +117,7 @@ def on_study_group_marker_post_save(sender, instance: StudyGroupMarker, **kwargs
             'longitude': instance.longitude,
             'type': instance.type
         }
-        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+        requests.post("http://localhost:8001/new-marker", data=body, timeout=5)
     except Exception as ex:
         print(str(ex))
 
@@ -130,7 +130,7 @@ def on_extra_activity_marker_post_save(sender, instance: ExtraActivityMarker, **
             'longitude': instance.longitude,
             'type': instance.type
         }
-        requests.post("http://localhost:80/new-marker", data=body, timeout=5)
+        requests.post("http://localhost:8001/new-marker", data=body, timeout=5)
     except Exception as ex:
         print(str(ex))
 
