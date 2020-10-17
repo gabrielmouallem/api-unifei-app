@@ -57,19 +57,19 @@ class SelectedMarkerView(APIView):
         construction_marker = ConstructionMarker.objects.filter(pk=self.kwargs.get('pk')).first()
         if construction_marker is not None:
             return Response(data={
-                "data": ConstructionMarkerSerializer(instance=construction_marker),
+                "data": ConstructionMarkerSerializer(instance=construction_marker).data,
             }, status=200)
 
         event_marker = EventMarker.objects.filter(pk=self.kwargs.get('pk')).first()
         if event_marker is not None:
             return Response(data={
-                "data": EventMarkerSerializer(instance=event_marker),
+                "data": EventMarkerSerializer(instance=event_marker).data,
             }, status=200)
 
         extra_activity_marker = ExtraActivityMarker.objects.filter(pk=self.kwargs.get('pk')).first()
         if extra_activity_marker is not None:
             return Response(data={
-                "data": ExtraActivityMarkerSerializer(instance=extra_activity_marker),
+                "data": ExtraActivityMarkerSerializer(instance=extra_activity_marker).data,
             }, status=200)
 
         return Response(status=404)
