@@ -18,107 +18,60 @@ from authentication.models import Profile
 from authentication.serializers import UserSerializer, ProfileSerializer
 from django.forms.models import model_to_dict
 import base64, os
-import pdfplumber as pdf
+import pdfplumber
 
-def return_weekday(index):
-    if index == 1:
-        return "1#Domingo"
-    if index == 2:
-        return "2#Segunda"
-    if index == 3:
-        return "3#Terça"
-    if index == 4:
-        return "4#Quarta"
-    if index == 5:
-        return "5#Quinta"
-    if index == 6:
-        return "6#Sexta"
-    if index == 7:
-        return "7#Sábado"
+def extract_signatures(pdfpath):
 
-def unique_list(l):
-    ulist = []
-    [ulist.append(x) for x in l if x not in ulist]
-    return ulist
+    def remove_spaces(string):
+        return "".join(string.rstrip().lstrip())
+    try:
+        signatures = []
+        with pdfplumber.open(pdfpath) as pdf:
+            table1 = pdf.pages[0].extract_tables()[0][1:]
+        for val in table1:
+            if 'Local:' in val[1] and 'Tipo:' in val[1] and 'MATRICULADO' in val[3]:
 
-def extract_data(first_table, second_table):
-    table = []
-    first_table_result = []
-    flag = True
-    for row_index, row in enumerate(first_table):
-        if "" in row:
-            for column_index, column in enumerate(row):
-                if column != "":
-                    place_to_append = table[row_index - 1][column_index]
-                    table[row_index - 1][column_index] = place_to_append + column
-                    # Deletar a row_index
-        else:
-            table.append(row)
-    # print(table)
-    for row in table:
-        if "" in row:
-            print("jumped row.")
-        else:
-            data = {}
-            if flag == True:
-                flag = False
-                continue
-            if ('SUPERV' in row[0]) or ('FINAL' in row[0]):
-                continue
-            if 'ORIENTADOR' in row[1]:
-                # print('b')
-                continue
-            if not row[4]:
-                continue
-            data['codigo_horario'] = row[4]
-            data['local'] = row[1].split()[-1]
-            data['codigo'] = row[0]
-            if data:
-                first_table_result.append(data)
-
-    for row_index, row in enumerate(second_table):
-        if row_index > 0:
-            for column_index, column in enumerate(row):
-                time = row[0]
-                for index, table in enumerate(first_table_result):
-                    if table['codigo'] == column:
-                        if not "horario" in first_table_result[index]:
-                            first_table_result[index]['horario'] = str(column_index) +"#" + time
-                        else:
-                            first_table_result[index]['horario'] = first_table_result[index]['horario'] + " $" + str(column_index) +"#" + time
-                        if not "dia_da_semana" in first_table_result[index]:
-                            first_table_result[index]['dia_da_semana'] = return_weekday(column_index)
-                        else:
-                            if str(first_table_result[index]['dia_da_semana']).find(return_weekday(column_index)):
-                                first_table_result[index]['dia_da_semana'] = first_table_result[index]['dia_da_semana'] + " $" + return_weekday(column_index)
-                                first_table_result[index]['dia_da_semana'] = ' '.join(unique_list(first_table_result[index]['dia_da_semana'].split()))
-
-    return (first_table_result)
-
+                code = remove_spaces(val[0]).upper()
+                group = remove_spaces(val[2]).title()
+                schedules = val[4].split()
+                about = val[1].split('\n')
+                # Tipo: DISCIPLINA Local: sala de aula virtual
+                classroom_type = about[-1].split('Local:')
+                classroom = remove_spaces(classroom_type[-1]).title()
+                stype = remove_spaces(classroom_type[0].split('Tipo:')[-1]).title()
+                professor = remove_spaces(about[-2]).title()
+                name = remove_spaces((' '.join(about[0:-2]))).title()
+                signatures.append({"name": name, "code": code, "type": stype, "professor": professor, "classroom": classroom, "group": group, "schedules": schedules})
+        return signatures
+    except Exception as ex:
+        print("Signature exception ", str(ex))
+        return -1
 
 class SendPdfView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     def post (self, request):
-        try:
+        # try:
+        print(request.data['data'])
+        data = request.data['data']
+        with open(os.path.expanduser('./myschedule.pdf'), 'wb') as fout:
+            fout.write(base64.b64decode(data))
 
-            # data = request.data['data']
-            # with open(os.path.expanduser('./myschedule.pdf'), 'wb') as fout:
-            #     fout.write(base64.b64decode(data))
+        # Caminho do arquivo
+        path = './myschedule.pdf'
+        # passar o path na função do juninho
 
-            # Caminho do arquivo
-            path = './myschedule.pdf'
-            reader = pdf.open(path)
-            page = reader.pages[0]
-            first_table_data = page.extract_tables()[0]
-            second_table_data = page.extract_tables()[1]
+        object_data = extract_signatures(path)
+        print(object_data)
+        if object_data != -1:
+            # Expected json string
+            # data = json.dumps([ob.__dict__ for ob in object_data], sort_keys=True, indent=4, ensure_ascii=False)
+            return Response(data={"data": object_data})
+        else:
+            return Response(data={"data": None, "error": 'error on signature function.'})
 
-            data = extract_data(first_table_data, second_table_data)
-            # print(data)
-            return Response(data={"data": data})
-
-        except Exception as ex:
-            return Response(data={"data": None, "error": str(ex)})
+        # except Exception as ex:
+        #     return Response(data={"data": None, "error": str(ex)})
 
 class LoginView(APIView):
     permission_classes = ()
