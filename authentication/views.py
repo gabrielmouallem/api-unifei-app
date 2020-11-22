@@ -20,14 +20,19 @@ from django.forms.models import model_to_dict
 import base64, os
 import pdfplumber
 
-def extract_signatures(pdfpath):
+from schedules.models import Schedule, Classroom
+from schedules.serializers import ScheduleSerializer
+
+
+def extract_signatures(pdfpath, profile):
 
     def remove_spaces(string):
         return "".join(string.rstrip().lstrip())
     try:
-        signatures = []
+        # signatures = []
         with pdfplumber.open(pdfpath) as pdf:
             table1 = pdf.pages[0].extract_tables()[0][1:]
+        schedule = Schedule.objects.create(profile=profile)
         for val in table1:
             if 'Local:' in val[1] and 'Tipo:' in val[1] and 'MATRICULADO' in val[3]:
 
@@ -41,8 +46,10 @@ def extract_signatures(pdfpath):
                 stype = remove_spaces(classroom_type[0].split('Tipo:')[-1]).title()
                 professor = remove_spaces(about[-2]).title()
                 name = remove_spaces((' '.join(about[0:-2]))).title()
-                signatures.append({"name": name, "code": code, "type": stype, "professor": professor, "classroom": classroom, "group": group, "schedules": schedules})
-        return signatures
+                classroom = Classroom.objects.create(content={"name": name, "code": code, "type": stype, "professor": professor, "classroom": classroom, "group": group, "schedules": schedules})
+                schedule.classrooms.add(classroom)
+                # signatures.append({"name": name, "code": code, "type": stype, "professor": professor, "classroom": classroom, "group": group, "schedules": schedules})
+        return ScheduleSerializer(instance=schedule).data
     except Exception as ex:
         print("Signature exception ", str(ex))
         return -1
@@ -51,27 +58,27 @@ class SendPdfView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     def post (self, request):
-        # try:
-        print(request.data['data'])
-        data = request.data['data']
-        with open(os.path.expanduser('./myschedule.pdf'), 'wb') as fout:
-            fout.write(base64.b64decode(data))
+        try:
+            profile = Profile.objects.get(user_id=self.request.user.pk)
+            data = request.data['data']
+            with open(os.path.expanduser('./myschedule.pdf'), 'wb') as fout:
+                fout.write(base64.b64decode(data))
 
-        # Caminho do arquivo
-        path = './myschedule.pdf'
-        # passar o path na função do juninho
+            # Caminho do arquivo
+            path = './myschedule.pdf'
+            # passar o path na função do juninho
 
-        object_data = extract_signatures(path)
-        print(object_data)
-        if object_data != -1:
-            # Expected json string
-            # data = json.dumps([ob.__dict__ for ob in object_data], sort_keys=True, indent=4, ensure_ascii=False)
-            return Response(data={"data": object_data})
-        else:
-            return Response(data={"data": None, "error": 'error on signature function.'})
+            object_data = extract_signatures(path, profile)
+            print(object_data)
+            if object_data != -1:
+                # Expected json string
+                # data = json.dumps([ob.__dict__ for ob in object_data], sort_keys=True, indent=4, ensure_ascii=False)
+                return Response(data={"data": object_data})
+            else:
+                return Response(data={"data": None, "error": 'error on signature function.'})
 
-        # except Exception as ex:
-        #     return Response(data={"data": None, "error": str(ex)})
+        except Exception as ex:
+            return Response(data={"data": None, "error": str(ex)})
 
 class LoginView(APIView):
     permission_classes = ()

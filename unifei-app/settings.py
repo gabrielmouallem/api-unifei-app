@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'unifei-app',
     'authentication',
     'markers',
+    'schedules'
 ]
 
 REST_FRAMEWORK = {
