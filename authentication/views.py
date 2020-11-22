@@ -46,7 +46,7 @@ def extract_signatures(pdfpath, profile):
                 stype = remove_spaces(classroom_type[0].split('Tipo:')[-1]).title()
                 professor = remove_spaces(about[-2]).title()
                 name = remove_spaces((' '.join(about[0:-2]))).title()
-                classroom = Classroom.objects.create(content={"name": name, "code": code, "type": stype, "professor": professor, "classroom": classroom, "group": group, "schedules": schedules})
+                classroom = Classroom.objects.create(profile=profile, content={"name": name, "code": code, "type": stype, "professor": professor, "classroom": classroom, "group": group, "schedules": schedules})
                 schedule.classrooms.add(classroom)
                 # signatures.append({"name": name, "code": code, "type": stype, "professor": professor, "classroom": classroom, "group": group, "schedules": schedules})
         return ScheduleSerializer(instance=schedule).data
