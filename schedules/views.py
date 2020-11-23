@@ -1,14 +1,27 @@
+from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-
+from django.http import JsonResponse
 from authentication.models import Profile
 from markers.models import Marker
 from schedules.models import Schedule, Classroom
 from rest_framework.response import Response
 
-from schedules.serializers import ScheduleSerializer
+from schedules.serializers import ScheduleSerializer, ClassroomSerializer, ClassroomSpecialSerializer
+
+
+class ClassroomListView(ListAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+    queryset = User.objects.all()
+    serializer_class = ClassroomSpecialSerializer
+    model = Classroom
+
+    def get_queryset(self):
+        return Classroom.objects.filter(profile__user_id=self.request.user.id).exclude(marker=None)
+
 
 
 class AddMarkerToClassroomView(APIView):

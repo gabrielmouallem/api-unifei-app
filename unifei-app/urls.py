@@ -22,7 +22,7 @@ from markers.views import ListAllMarkersView, ExtraActivityMarkerCreateView, Stu
  \
     SelectedMarkerView, GenericMarkerUpdateView, EventMarkerUpdateView, ConstructionMarkerUpdateView, \
     StudyGroupMarkerUpdateView, ExtraActivityMarkerUpdateView
-from schedules.views import AddMarkerToClassroomView, RetriveScheduleViewByProfile
+from schedules.views import AddMarkerToClassroomView, RetriveScheduleViewByProfile, ClassroomListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +37,7 @@ urlpatterns = [
 
     path('schedule/', RetriveScheduleViewByProfile.as_view(), name="retrieve-schedul"),
     path('schedule/classroom/marker/', AddMarkerToClassroomView.as_view(), name="add-marker-to-classroom"),
+    path('classroom/', ClassroomListView.as_view(), name="classroom-list"),
 
     path('markers/', ListAllMarkersView.as_view(), name='markers-list'),
 
