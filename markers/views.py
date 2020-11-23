@@ -24,7 +24,7 @@ class ListAllMarkersView(APIView):
         study_group_markers = StudyGroupMarker.objects.all().order_by('id').values()
         event_markers = EventMarker.objects.all().order_by('id').values()
         construction_markers = ConstructionMarker.objects.all().order_by('id').values()
-        generic_markers = GenericMarker.objects.all().order_by('id').filter(type=3).values()
+        generic_markers = GenericMarker.objects.all().filter(profile=Profile.objects.get(user=self.request.user)).order_by('id').filter(type=3).values()
 
         return Response(data={
             "data": list(itertools.chain(
