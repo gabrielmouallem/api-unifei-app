@@ -11,6 +11,10 @@ class Classroom(models.Model):
     marker = models.OneToOneField(Marker, null=True, blank=True, on_delete=models.SET_NULL)
     content = JSONField(default=list)
 
+    def __str__(self):
+        return "Sala de ID: " + str(self.id) + " | " + str(self.profile.name)
+
+
 
 class Schedule(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
